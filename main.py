@@ -2,11 +2,32 @@ from tkinter import*
 import random
 from numpy import * 
 
-  
+def control():
+    controlPanel = Tk()
+    controlPanel.title('Kontrol paneli')
+    controlPanel.geometry('400x400')
+    controlPanel.resizable(width = FALSE, height = FALSE)
+    T1 = Text(controlPanel, height = 1, width = 10)
+    T2 = Text(controlPanel, height = 1, width = 10)
+    l1 = Label(controlPanel, text = "Başlangıç noktasını seçiniz")
+    l1.config(font =("Courier", 14))
+    l2 = Label(controlPanel, text = "Bitiş noktasını seçiniz")
+    l2.config(font =("Courier", 14))
+    Fact = """12,13"""
+    b1 = Button(controlPanel, text = "Onayla", )
+    l1.pack()
+    T1.pack()
+    l2.pack()
+    T2.pack()
+    b1.pack()
+    T1.insert(END, Fact)
+    T2.insert(END, Fact)
+    controlPanel.mainloop()
 root = Tk()
 root.title('Q-Learnig ile Yol Planlaması')
 root.geometry('800x800')
 root.resizable(width = FALSE, height = FALSE)
+
 buttonCount= 50
 countNumber=0
 #startpoint =1 endpoint = 2 path =0 obstacle= -1
@@ -59,6 +80,6 @@ for i in range (buttonCount):
                 else:
                     f.write(str(i) + ", " + str(j) + ", " + "B" + "\n") # B Not Obstacle     
 
-
+control()
 root.maxsize(800, 800)
 root.mainloop()
