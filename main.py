@@ -50,5 +50,15 @@ for i in range(buttonCount):
         label.place(x=0, y=0)
         buttons.append(label)
         label.place(relx=0.02+(0.02*j), rely=0.02+(0.02*i), anchor='se')
+        
+f = open("engel.txt", "w")    
+for i in range (buttonCount):
+            for j in range (buttonCount):
+                if(obstacleMatrix[i][j] == -1):
+                    f.write(str(i) + ", " + str(j) + ", " + "K" + "\n") # K Obstacle
+                else:
+                    f.write(str(i) + ", " + str(j) + ", " + "B" + "\n") # B Not Obstacle     
+
+
 root.maxsize(800, 800)
 root.mainloop()
