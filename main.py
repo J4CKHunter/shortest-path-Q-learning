@@ -2,27 +2,10 @@ from tkinter import*
 import random
 from numpy import * 
 
-def control():
-    controlPanel = Tk()
-    controlPanel.title('Kontrol paneli')
-    controlPanel.geometry('400x400')
-    controlPanel.resizable(width = FALSE, height = FALSE)
-    T1 = Text(controlPanel, height = 1, width = 10)
-    T2 = Text(controlPanel, height = 1, width = 10)
-    l1 = Label(controlPanel, text = "Başlangıç noktasını seçiniz")
-    l1.config(font =("Courier", 14))
-    l2 = Label(controlPanel, text = "Bitiş noktasını seçiniz")
-    l2.config(font =("Courier", 14))
-    Fact = """12,13"""
-    b1 = Button(controlPanel, text = "Onayla", )
-    l1.pack()
-    T1.pack()
-    l2.pack()
-    T2.pack()
-    b1.pack()
-    T1.insert(END, Fact)
-    T2.insert(END, Fact)
-    controlPanel.mainloop()
+startX = ""
+startY = ""
+endX = ""
+endY = ""
 root = Tk()
 root.title('Q-Learnig ile Yol Planlaması')
 root.geometry('800x800')
@@ -40,25 +23,59 @@ for i in range(750):
     number1 =int(random.random()*50)
     number2 =int(random.random()*50)
     obstacleMatrix[number1][number2] = -1
+    
 
-for i in range(buttonCount):
-    number1 =int(random.random()*50)
-    number2 =int(random.random()*50)
-    if(obstacleMatrix[number1][number2] == 0 ):
-        obstacleMatrix[number1][number2] = 1
-        break
-
-for i in range(buttonCount):
-    number1 =int(random.random()*50)
-    number2 =int(random.random()*50)
-    if(obstacleMatrix[number1][number2] == 0):
-        obstacleMatrix[number1][number2] = 2
-        break
+def control():
+    
+    controlPanel = Tk()
+    controlPanel.title('Kontrol paneli')
+    controlPanel.geometry('400x400')
+    controlPanel.resizable(width = FALSE, height = FALSE)
+    T1 = Text(controlPanel, height = 1, width = 10)
+    T2 = Text(controlPanel, height = 1, width = 10)
+    l1 = Label(controlPanel, text = "Başlangıç noktasını seçiniz")
+    l1.config(font =("Courier", 14))
+    l2 = Label(controlPanel, text = "Bitiş noktasını seçiniz")
+    l2.config(font =("Courier", 14))
+    def getTextInput():
+        result1=T1.get("1.0","end")
+        mylist1 = result1.split(',')
+        result2=T2.get("1.0","end")
+        mylist2 = result2.split(',')
+        startX = mylist1[0]
+        startY = mylist1[1]
+        endX = mylist2[0]
+        endY = mylist2[1]
+        print(startX+ startY)
+        obstacleMatrix[int(startX)][int(startY)] = 1
+        obstacleMatrix[int(endX)][int(endY)] = 2
+        number=int(startX)+(int(startY)*50)
+        numberAsıl=0
+           
+        print(number)
+        for label in buttons:
+            numberAsıl = numberAsıl +1
+            if(numberAsıl== number):
+                label.config(bg="blue")
+        
+        number=int(endX)+(int(endY)*50)
+        numberAsıl=0
+        for label in buttons:
+            numberAsıl = numberAsıl +1
+            if(numberAsıl== number):
+                label.config(bg="green")
+        
+    b1 = Button(controlPanel, text = "Onayla",command=getTextInput ) 
+    l1.pack()
+    T1.pack()
+    l2.pack()
+    T2.pack()
+    b1.pack()
+    controlPanel.mainloop()
 
 buttons = []
 for i in range(buttonCount):
     for j in range(buttonCount):
-        countNumber = countNumber
         if(obstacleMatrix[i][j] == -1):
             label.config(bg="red")
         elif(obstacleMatrix[i][j] == 1):
