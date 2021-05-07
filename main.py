@@ -46,7 +46,6 @@ def control():
         startY = mylist1[1]
         endX = mylist2[0]
         endY = mylist2[1]
-        print(startX+ startY)
         obstacleMatrix[int(startX)][int(startY)] = 1
         obstacleMatrix[int(endX)][int(endY)] = 2
         number=int(startX)+(int(startY)*50)
@@ -98,5 +97,4 @@ for i in range (buttonCount):
                     f.write(str(i) + ", " + str(j) + ", " + "B" + "\n") # B Not Obstacle     
 
 control()
-root.maxsize(800, 800)
 root.mainloop()
