@@ -205,7 +205,7 @@ def control():
                 pylab.title("Episode via Step")
                 pylab.xlabel("Episodes")
                 pylab.ylabel("Steps")
-                pylab.savefig("./q_learning10.png")
+                pylab.savefig("./EpisodeViaStep.png")
                 '''    
                     def terminating_sequence(self):
                     episodes_array =[]
