@@ -71,9 +71,7 @@ def control():
                 label.config(bg="green")
     
     def startQlearning():
-        
-
-
+        file = open("matris.txt", "w")  
         class Maze:
             def __init__(self, q_table=None):
                 self.maze = deepcopy(obstacleMatrix)
@@ -203,10 +201,12 @@ def control():
                 print("Agent reached destination in %d steps" % steps)
 
             def print_maze(self):
-                file = open("matris.txt", "w")       
+                     
                 for element in self.maze:
-                    print(element)
                     file.write(str(element))
+                    print(element)
+                file.write("\n")
+                file.write("\n")    
                 print()
 
            
