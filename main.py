@@ -1,7 +1,10 @@
 from tkinter import*
 import random
-from numpy import * 
+from numpy import *
 from copy import deepcopy
+from matplotlib import pylab
+from pylab import *
+
 startSatir = ""
 startSutun = ""
 endSatir = ""
@@ -9,7 +12,7 @@ endSutun = ""
 root = Tk()
 root.title('Q-Learnig ile Yol Planlaması')
 root.geometry('800x800')
-root.resizable(width = FALSE, height = FALSE)
+root.resizable(width=FALSE, height=FALSE)
 
 # learning rate
 ALPHA = 0.03
@@ -21,34 +24,36 @@ EPOCHS = 10000
 MAXIMUM_STEPS = 100
 MOVES = ['L', 'U', 'R', 'D']
 
-buttonCount= 50
-countNumber=0
-#startpoint =1 endpoint = 2 path =0 obstacle= -1
+buttonCount = 50
+countNumber = 0
+# startpoint =1 endpoint = 2 path =0 obstacle= -1
 obstacleMatrix = zeros((50, 50))
 for i in range(buttonCount):
     for j in range(buttonCount):
         obstacleMatrix[i][j] = 0
 
 for i in range(750):
-    number1 =int(random.random()*50)
-    number2 =int(random.random()*50)
+    number1 = int(random.random()*50)
+    number2 = int(random.random()*50)
     obstacleMatrix[number1][number2] = -1
-    
-def control():   
+
+
+def control():
     controlPanel = Tk()
     controlPanel.title('Kontrol paneli')
     controlPanel.geometry('400x400')
-    controlPanel.resizable(width = FALSE, height = FALSE)
-    T1 = Text(controlPanel, height = 1, width = 10)
-    T2 = Text(controlPanel, height = 1, width = 10)
-    l1 = Label(controlPanel, text = "Başlangıç noktasını seçiniz")
-    l1.config(font =("Courier", 14))
-    l2 = Label(controlPanel, text = "Bitiş noktasını seçiniz")
-    l2.config(font =("Courier", 14))
+    controlPanel.resizable(width=FALSE, height=FALSE)
+    T1 = Text(controlPanel, height=1, width=10)
+    T2 = Text(controlPanel, height=1, width=10)
+    l1 = Label(controlPanel, text="Başlangıç noktasını seçiniz")
+    l1.config(font=("Courier", 14))
+    l2 = Label(controlPanel, text="Bitiş noktasını seçiniz")
+    l2.config(font=("Courier", 14))
+
     def getTextInput():
-        result1=T1.get("1.0","end")
+        result1 = T1.get("1.0", "end")
         mylist1 = result1.split(',')
-        result2=T2.get("1.0","end")
+        result2 = T2.get("1.0", "end")
         mylist2 = result2.split(',')
         startSatir = mylist1[0]
         startSutun = mylist1[1]
@@ -56,26 +61,28 @@ def control():
         endSutun = mylist2[1]
         obstacleMatrix[int(startSatir)][int(startSutun)] = 1
         obstacleMatrix[int(endSatir)][int(endSutun)] = 2
-        number=int(startSutun)+1+(int(startSatir)*50)
-        labelCount=0
+        number = int(startSutun)+1+(int(startSatir)*50)
+        labelCount = 0
         for label in buttons:
-            labelCount = labelCount +1
-            if(labelCount== number):
+            labelCount = labelCount + 1
+            if(labelCount == number):
                 label.config(bg="blue")
-        
-        number=int(endSutun)+1+(int(endSatir)*50)
-        labelCount=0
+
+        number = int(endSutun)+1+(int(endSatir)*50)
+        labelCount = 0
         for label in buttons:
-            labelCount = labelCount +1
-            if(labelCount== number):
+            labelCount = labelCount + 1
+            if(labelCount == number):
                 label.config(bg="green")
-    
+
     def startQlearning():
-        file = open("matris.txt", "w")  
+        file = open("matris.txt", "w")
+
         class Maze:
             def __init__(self, q_table=None):
                 self.maze = deepcopy(obstacleMatrix)
-                self.final_state = self.get_position(2)  # position of the destination
+                self.final_state = self.get_position(
+                    2)  # position of the destination
                 self.Q = q_table
 
             def get_position(self, symbol):
@@ -83,6 +90,7 @@ def control():
                     for j in range(0, len(self.maze[i])):
                         if self.maze[i][j] == symbol:
                             return i, j
+
             def select_move(self, epsilon):
                 """
                 Selects the next move.
@@ -107,7 +115,8 @@ def control():
                     if self.Q[p, m] > maximum:
                         maximum = self.Q[p, m]
                         best_moves = [m]
-                return random.choice(best_moves)  # one of the best Q's for current state
+                # one of the best Q's for current state
+                return random.choice(best_moves)
 
             def get_reward(self):
                 """
@@ -166,8 +175,8 @@ def control():
                             self.Q[(i, j), k] = 0
 
                 epsilon = 1  # allow more exploration in the beginning of the training
-
-                for _ in range(EPOCHS):
+                scores, episodes = [], []
+                for i in range(EPOCHS):
                     self.maze = deepcopy(obstacleMatrix)
                     s = self.get_position(1)
                     steps = 0
@@ -177,14 +186,35 @@ def control():
                         self.update_maze(next_move)
 
                         r = self.get_reward()
-                        new_p = self.get_position(1)  # new position of the agent
+                        # new position of the agent
+                        new_p = self.get_position(1)
                         best_q = self.get_best_q()
 
                         # update Q table using the TD learning rule
-                        self.Q[s, next_move] += ALPHA * (r + GAMMA * self.Q[new_p, best_q] - self.Q[s, next_move])
+                        self.Q[s, next_move] += ALPHA * \
+                            (r + GAMMA * self.Q[new_p,
+                             best_q] - self.Q[s, next_move])
 
                         s = self.get_position(1)
-                        epsilon -= (epsilon * 0.001)  # decay the exploration factor
+                        # decay the exploration factor
+                        epsilon -= (epsilon * 0.001)
+                        
+                    scores.append(steps)
+                    episodes.append(i)
+                pylab.plot(episodes, scores, 'b')
+                pylab.title("Episode via Step")
+                pylab.xlabel("Episodes")
+                pylab.ylabel("Steps")
+                pylab.savefig("./q_learning10.png")
+                '''    
+                    def terminating_sequence(self):
+                    episodes_array =[]
+                    for i in range(self.episodes-1):
+                        episodes_array.append(i+1)
+                    plt.plot(episodes_array,self.actions_performed)
+                    plt.xlabel('Episodes')
+                    plt.ylabel('Actions per Episode')
+                    plt.show()'''
 
             def test(self):
                 print("TEST")
@@ -200,42 +230,31 @@ def control():
                 print("Agent reached destination in %d steps" % steps)
 
             def print_maze(self):
-                a=self.get_position(1)
+                a = self.get_position(1)
                 print(a[0])
-                print("\n")  
-                number=int((a[1])+1+(int((a[0])*50)))
-                labelCount=0
+                print("\n")
+                number = int((a[1])+1+(int((a[0])*50)))
+                labelCount = 0
                 for label in buttons:
-                    labelCount = labelCount +1
-                    if(labelCount== number):
+                    labelCount = labelCount + 1
+                    if(labelCount == number):
                         label.config(bg="purple")
-                
-                
-                
-                
-                
-                
-                
-                
-                
-               
+
                 for element in self.maze:
                     file.write(str(element))
                     print(element)
                 file.write("\n")
-                file.write("\n")    
+                file.write("\n")
                 print()
-
-           
 
         if __name__ == "__main__":
             maze = Maze()
             maze.training()
             maze.test()
-        
-    b1 = Button(controlPanel, text = "Onayla",command=getTextInput ) 
-    b2 = Button(controlPanel, text = "start",command=startQlearning )
-    
+
+    b1 = Button(controlPanel, text="Onayla", command=getTextInput)
+    b2 = Button(controlPanel, text="start", command=startQlearning)
+
     l1.pack()
     T1.pack()
     l2.pack()
@@ -244,11 +263,12 @@ def control():
     b2.pack()
     controlPanel.mainloop()
 
+
 buttons = []
 for i in range(buttonCount):
     for j in range(buttonCount):
         var = StringVar()
-        label = Label( root, textvariable=var)
+        label = Label(root, textvariable=var)
         var.set(int(random.random()*10))
         if(obstacleMatrix[i][j] == -1):
             label.config(bg="red")
@@ -261,15 +281,13 @@ for i in range(buttonCount):
         label.place(relx=0.02+(0.02*j), rely=0.02+(0.02*i), anchor='se')
 
 
-
-        
-
-f = open("engel.txt", "w")    
-for i in range (buttonCount):
-            for j in range (buttonCount):
-                if(obstacleMatrix[i][j] == -1):
-                    f.write(str(i) + ", " + str(j) + ", " + "K" + "\n") # K Obstacle
-                else:
-                    f.write(str(i) + ", " + str(j) + ", " + "B" + "\n") # B Not Obstacle
+f = open("engel.txt", "w")
+for i in range(buttonCount):
+    for j in range(buttonCount):
+        if(obstacleMatrix[i][j] == -1):
+            f.write(str(i) + ", " + str(j) + ", " + "K" + "\n")  # K Obstacle
+        else:
+            f.write(str(i) + ", " + str(j) + ", " +
+                    "B" + "\n")  # B Not Obstacle
 control()
 root.mainloop()
