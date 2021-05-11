@@ -175,7 +175,7 @@ def control():
                             self.Q[(i, j), k] = 0
 
                 epsilon = 1  # allow more exploration in the beginning of the training
-                scores, episodes = [], []
+                scores, episodes,rewardsss = [], [],[]
                 for i in range(EPOCHS):
                     self.maze = deepcopy(obstacleMatrix)
                     s = self.get_position(1)
@@ -189,7 +189,7 @@ def control():
                         # new position of the agent
                         new_p = self.get_position(1)
                         best_q = self.get_best_q()
-
+                        
                         # update Q table using the TD learning rule
                         self.Q[s, next_move] += ALPHA * \
                             (r + GAMMA * self.Q[new_p,
@@ -201,11 +201,18 @@ def control():
                         
                     scores.append(steps)
                     episodes.append(i)
+                    rewardsss.append(r)
                 pylab.plot(episodes, scores, 'b')
                 pylab.title("Episode via Step")
                 pylab.xlabel("Episodes")
                 pylab.ylabel("Steps")
                 pylab.savefig("./EpisodeViaStep.png")
+                pylab.clf()
+                pylab.plot(episodes, rewardsss, 'b')
+                pylab.title("Episode via Cost")
+                pylab.xlabel("Episodes")
+                pylab.ylabel("Costs")
+                pylab.savefig("./EpisodeViaCost.png")
                 '''    
                     def terminating_sequence(self):
                     episodes_array =[]
