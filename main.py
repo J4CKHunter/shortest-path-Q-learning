@@ -14,7 +14,7 @@ root.resizable(width = FALSE, height = FALSE)
 # learning rate
 ALPHA = 0.03
 # discount factor
-GAMMA = 0.95
+GAMMA = 0.90
 # number of epochs for training
 EPOCHS = 10000
 # maximum number of steps per epoch
@@ -83,7 +83,6 @@ def control():
                     for j in range(0, len(self.maze[i])):
                         if self.maze[i][j] == symbol:
                             return i, j
-
             def select_move(self, epsilon):
                 """
                 Selects the next move.
@@ -201,7 +200,25 @@ def control():
                 print("Agent reached destination in %d steps" % steps)
 
             def print_maze(self):
-                     
+                a=self.get_position(1)
+                print(a[0])
+                print("\n")  
+                number=int((a[1])+1+(int((a[0])*50)))
+                labelCount=0
+                for label in buttons:
+                    labelCount = labelCount +1
+                    if(labelCount== number):
+                        label.config(bg="purple")
+                
+                
+                
+                
+                
+                
+                
+                
+                
+               
                 for element in self.maze:
                     file.write(str(element))
                     print(element)
@@ -217,7 +234,8 @@ def control():
             maze.test()
         
     b1 = Button(controlPanel, text = "Onayla",command=getTextInput ) 
-    b2 = Button(controlPanel, text = "start",command=startQlearning ) 
+    b2 = Button(controlPanel, text = "start",command=startQlearning )
+    
     l1.pack()
     T1.pack()
     l2.pack()
@@ -241,7 +259,11 @@ for i in range(buttonCount):
         label.place(x=0, y=0)
         buttons.append(label)
         label.place(relx=0.02+(0.02*j), rely=0.02+(0.02*i), anchor='se')
+
+
+
         
+
 f = open("engel.txt", "w")    
 for i in range (buttonCount):
             for j in range (buttonCount):
@@ -249,6 +271,5 @@ for i in range (buttonCount):
                     f.write(str(i) + ", " + str(j) + ", " + "K" + "\n") # K Obstacle
                 else:
                     f.write(str(i) + ", " + str(j) + ", " + "B" + "\n") # B Not Obstacle
-
 control()
 root.mainloop()
