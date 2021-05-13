@@ -8,7 +8,6 @@ from pylab import *
 from tkinter import*
 from numpy import *
 
-
 if __name__ == "__main__":
     def control():
         controlPanel = Tk()
@@ -33,9 +32,6 @@ if __name__ == "__main__":
             endSutun = mylist2[1]
             controlPanel.destroy()
             
-            
-            
-            
             grid_world = GridWorld(50,50,int(startSutun),int(startSatir),int(endSutun),int(endSatir))
             Functions.create_random_obstacles(grid_world, 0.3)
             grid_world.scan_grid_and_generate_graph()
@@ -43,13 +39,10 @@ if __name__ == "__main__":
             grid_world.create_grid_ui(grid_world.m, grid_world.n, (grid_world.start_x, grid_world.start_y),
                                     (grid_world.end_x, grid_world.end_y), grid_world.obstacles)
             grid_world.print_grid()
-
             QL = QLearning(list(range(4)))
-
             scores, episodes, steps = [], [], []
             list_x = []
             list_y = []
-
             number_of_episodes = 10
             for episode in range(number_of_episodes):
                 step = 0
@@ -60,10 +53,8 @@ if __name__ == "__main__":
                 list_y.clear()
                 while True:
                     grid_world.render()
-
                     action = QL.get_action(str(state))
                     next_state, reward, done = grid_world.step(action)
-
                     QL.learn(str(state), action, reward, str(next_state))
                     if reward != 0:
                         print("<state:{0} , action:{1} , reward:{2} , next_state:{3}>".format(
@@ -75,7 +66,6 @@ if __name__ == "__main__":
                     state = next_state
                     score += reward
                     step += 1
-
                     if done:
                         scores.append(score)
                         episodes.append(episode)
@@ -107,8 +97,6 @@ if __name__ == "__main__":
             print(QL.q_table)
             grid_world.print_final_route(list_x,list_y)
             
-            
-            
         b1 = Button(controlPanel, text="Onayla", command=getTextInput)
         l1.pack()
         T1.pack()
@@ -117,4 +105,3 @@ if __name__ == "__main__":
         b1.pack()
         controlPanel.mainloop()
     control()
-   

@@ -83,34 +83,6 @@ class GridWorld:
             fill='#FFD600')
         self.frame.update()
 
-    def move_agent_random_moves(self):
-        directions = ['east', 'west', 'north', 'south']
-        for i in range(1000):
-            time.sleep(0.2)
-            possible_index = np.where(self.possible_moves[self.agent[0]][self.agent[1]])[0]
-            if possible_index.size == 0:
-                print("No possible move")
-                break
-            move = random.choice(possible_index)
-            move = directions[move]
-            if move == 'east':
-                if self.possible_moves[self.agent[0]][self.agent[1]][0]:
-                    self.agent = (self.agent[0] + 1, self.agent[1])
-                    self.update_agent_ui(self.agent)
-            if move == 'west':
-                if self.possible_moves[self.agent[0]][self.agent[1]][1]:
-                    self.agent = (self.agent[0] - 1, self.agent[1])
-                    self.update_agent_ui(self.agent)
-            if move == 'north':
-                if self.possible_moves[self.agent[0]][self.agent[1]][2]:
-                    self.agent = (self.agent[0], self.agent[1] - 1)
-                    self.update_agent_ui(self.agent)
-            if move == 'south':
-                if self.possible_moves[self.agent[0]][self.agent[1]][3]:
-                    self.agent = (self.agent[0], self.agent[1] + 1)
-                    self.update_agent_ui(self.agent)
-        tk.mainloop()
-
     def scan_grid_and_generate_graph(self):
         self.possible_moves = [[tuple()] * self.m for temp in range(self.n)]
         for i in range(self.m):
@@ -155,33 +127,6 @@ class GridWorld:
                 print(str(l[0]) + "," + str(l[1]) + " : ", end='')
             print()
 
-    # generic function
-    def get_random_path(self, start_node, end_node):
-        def recursive_function(key):
-            graph = self.graph
-            adjacent_nodes = graph.adjacency_map[key]
-            x = int(key.split(',')[0])
-            y = int(key.split(',')[1])
-            if x == end_x and y == end_y:
-                inner_final_route.append((x, y))
-                return -1
-            self.is_visited[x][y] = 1
-            random.shuffle(adjacent_nodes)
-            for l in adjacent_nodes:
-                if self.is_visited[l[0]][l[1]] == 0:
-                    ret_val = recursive_function(str(l[0]) + "," + str(l[1]))
-                    if ret_val == -1:
-                        inner_final_route.append((l[0], l[1]))
-                        return -1
-
-        end_x = end_node[0]
-        end_y = end_node[1]
-        inner_final_route = []
-        self.is_visited = [[0] * self.m for temp in range(self.n)]
-        start_key = str(start_node[0]) + ',' + str(start_node[1])
-        recursive_function(start_key)
-        return inner_final_route
-
     def get_heuristics(self, x, y):
         # manhattan distance
         x1 = abs(x - self.end_x)
@@ -193,88 +138,6 @@ class GridWorld:
         x1 = abs(x - self.start_x)
         y1 = abs(y - self.start_y)
         return x1 + y1
-
-    def move_on_given_route(self):
-        route = self.dfs_route
-        length = self.length
-        color_random = random.choice(self.COLORS)
-        for r in route:
-            time.sleep(0.02)
-            self.agent = (r[0], r[1])
-            i = r[0]
-            j = r[1]
-            if not (i == self.start_x and j == self.start_y) and not (i == self.end_x and j == self.end_y):
-                self.frame.create_rectangle(i * length + self.padding, j * length + self.padding,
-                                            i * length + self.padding + length,
-                                            j * length + self.padding + length, fill='purple')  # color_final_path2)
-            self.update_agent_ui(self.agent)
-        color_random = random.choice(self.COLORS)
-        for r in self.dfs_best_route:
-            time.sleep(0.01)
-            i = r[0]
-            j = r[1]
-            if not (i == self.start_x and j == self.start_y) and not (i == self.end_x and j == self.end_y):
-                self.frame.create_rectangle(i * length + self.padding, j * length + self.padding,
-                                            i * length + self.padding + length,
-                                            j * length + self.padding + length, fill='orange')
-            self.frame.update()
-
-    def move_on_given_route_a_star(self):
-        route = self.a_star_route
-        length = self.length
-        for r in route:
-            time.sleep(0.005)
-            self.agent = (r[0][0], r[0][1])
-            i = r[0][0]
-            j = r[0][1]
-            color = r[1]
-            if not (i == self.start_x and j == self.start_y) and not (i == self.end_x and j == self.end_y):
-                self.frame.create_rectangle(i * length + self.padding, j * length + self.padding,
-                                            i * length + self.padding + length,
-                                            j * length + self.padding + length, fill=color)
-            self.update_agent_ui(self.agent)
-
-        for r in self.a_star_final_route:
-            time.sleep(0.01)
-            i = r[0]
-            j = r[1]
-            if not (i == self.start_x and j == self.start_y) and not (i == self.end_x and j == self.end_y):
-                self.frame.create_rectangle(i * length + self.padding, j * length + self.padding,
-                                            i * length + self.padding + length,
-                                            j * length + self.padding + length, fill=self.color_final_path)
-            self.frame.update()
-
-    def move_on_given_route_genetic(self):
-        length = self.length
-        for r in self.final_route_genetic:
-            time.sleep(0.01)
-            i = r[0]
-            j = r[1]
-            if not (i == self.start_x and j == self.start_y) and not (i == self.end_x and j == self.end_y):
-                self.frame.create_rectangle(i * length + self.padding, j * length + self.padding,
-                                            i * length + self.padding + length,
-                                            j * length + self.padding + length, fill=self.color_final_path)
-            self.frame.update()
-
-    def move_on_given_route_aco(self, color_alternate):
-        length = self.length
-        if color_alternate % 4 == 0:
-            color = 'orange'
-        elif color_alternate % 4 == 1:
-            color = 'blue'
-        elif color_alternate % 4 == 2:
-            color = 'red'
-        else:
-            color = 'purple'
-        for r in self.aco_best_route:
-            time.sleep(0.002)
-            i = r[0]
-            j = r[1]
-            if not (i == self.start_x and j == self.start_y) and not (i == self.end_x and j == self.end_y):
-                self.frame.create_rectangle(i * length + self.padding, j * length + self.padding,
-                                            i * length + self.padding + length,
-                                            j * length + self.padding + length, fill=color)
-            self.frame.update()
 
     def save_graph(self):
         graph_code = ""

@@ -1,12 +1,10 @@
 import numpy as np
 from collections import defaultdict
 
-
 class QLearning:
-    # To Do: Fill in from here !
     def __init__(self, actions):
         self.actions = actions
-        self.alpha = 0.1  # Facteur d'apprentissage
+        self.alpha = 0.1  
         self.gamma = 0.9
         self.actions = actions
         self.epsilon = 0.01
@@ -14,9 +12,8 @@ class QLearning:
 
     def get_action(self, state):
         if np.random.uniform() > self.epsilon:
-            # choisir la meilleure action
             action_values = self.q_table[state]
-            argmax_actions = []  # La meilleure action peut ne pas exister donc on elle est choisie aléatoirement
+            argmax_actions = []  
             for i in range(len(action_values)):
                 if action_values[i] == np.max(action_values):
                     argmax_actions.append(i)
@@ -24,7 +21,7 @@ class QLearning:
         else:
             next_action = np.random.choice(self.actions)
         if self.epsilon > 0:
-            self.epsilon -= 0.00001  # Décrementer espsilon pour Arreter l'exploration aléatoire qu'on aura un politique optimale
+            self.epsilon -= 0.00001  
         if self.epsilon < 0:
             self.epsilon = 0
 
