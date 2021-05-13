@@ -13,7 +13,6 @@ class QLearning:
         self.q_table = defaultdict(lambda: [0.0, 0.0, 0.0, 0.0])
 
     def get_action(self, state):
-        # next_action = np.random.choice(self.actions)
         if np.random.uniform() > self.epsilon:
             # choisir la meilleure action
             action_values = self.q_table[state]
