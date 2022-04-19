@@ -1,4 +1,4 @@
-# path planning with Q-learning algorithm using python
+# path planning with python using Q-learning algorithm
 
 This desktop application uses the Q-Learning reinforcement learning algorithm.\
 This app performs optimum route finding between the start and end points within the maze whose 
@@ -10,3 +10,8 @@ README - tr
 Bu masaüstü uygulaması Q-Learning pekiştirmeli öğrenme algoritmasını kullanarak 
 kısıtları daha önceden belirlenen labirent içerisinde, kullanıcı tarafından belirlenen 
 başlangıç ve bitiş noktaları arasındaki optimum rota bulma işlemini gerçekleştirir.
+\
+
+* Projede gerçekleştirilmesi istenenleri [dökümantasyon dosyasında](https://github.com/J4CKHunter/shortest-path-Q-learning/blob/master/yazlab3.pdf) bulabilirsiniz.
+
+* Projede gerçekleştirilen isterler ile ilgili detaylı açıklamalar [proje raporunun](https://github.com/J4CKHunter/shortest-path-Q-learning/blob/master/rapor_180202060_180202050.pdf) içerisindedir.
